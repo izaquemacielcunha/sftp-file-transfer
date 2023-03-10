@@ -1,5 +1,7 @@
 package izaque.maciel.cunha.sftp.host;
 
+import java.io.IOException;
+
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
@@ -17,13 +19,27 @@ public class FileToRemoteHostImp implements FileToRemoteHost {
 	@Override
 	public void transferFileViaSFTP(SftpClient sftpClient, FileHost fileHost) {
 		try {
-			transferFile(sftpClient, fileHost);
+			synchronized (sftpClient) {
+				transferFile(sftpClient, fileHost);
+			}
 		} 
 		catch (SftpException e) {
 			e.printStackTrace();
 		} 
 		catch (JSchException e) {
 			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				closeChannel();
+				closeSession(sftpClient);
+			} 
+			catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -41,19 +57,23 @@ public class FileToRemoteHostImp implements FileToRemoteHost {
 		channelSftp.connect();
 	}
 
-	private void transferFile(SftpClient sftpClient, FileHost fileHost) throws JSchException, SftpException {
+	private void transferFile(SftpClient sftpClient, FileHost fileHost) throws JSchException, SftpException, IOException {
 		openChannelSftp(sftpClient);
 		writeFile(fileHost);
-		closeChannel();
 	}
 
 	private void writeFile(FileHost fileHost) throws SftpException {
 		channelSftp.put(fileHost.getFileBytes(), fileHost.getAbsolutePath());
 	}
 
-	private void closeChannel() {
-		if (channelSftp.isConnected())
+	private void closeChannel() throws IOException {
+		if (channelSftp != null)
+			channelSftp.getInputStream().close();
 			channelSftp.disconnect();
+	}
+	
+	private void closeSession(SftpClient sftpClient) {
+		sftpClient.closeSession();
 	}
 
 }// end of class

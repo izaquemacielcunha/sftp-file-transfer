@@ -39,7 +39,9 @@ public class SftpClientImp implements SftpClient {
 
 	@Override
 	public void closeSession() {
-		session.disconnect();
+		if(session != null) {
+			session.disconnect();
+		}
 	}
 
 	private void setSessionCredentials() {
