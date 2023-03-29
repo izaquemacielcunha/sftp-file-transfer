@@ -1,5 +1,8 @@
 package izaque.maciel.cunha.sftp;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -7,19 +10,20 @@ import com.jcraft.jsch.Session;
 /*
  * @author Izaque Maciel Cunha
  */
-
+@Component
 public class SftpClientImp implements SftpClient {
 	private JSch jsch;
 	private Session session;
+	@Value("${server.sftp.ip}")
 	private String remoteHostDnsOrIp;
+	@Value("${server.sftp.user}")
 	private String username;
+	@Value("${server.sftp.password}")
 	private String password;
-
-	public SftpClientImp(String remoteHostDnsOrIp, String username, String password) {
+	
+	public SftpClientImp() {
 		super();
-		this.remoteHostDnsOrIp = remoteHostDnsOrIp;
-		this.username = username;
-		this.password = password;
+		this.jsch = new JSch();
 	}
 
 	@Override
@@ -67,5 +71,13 @@ public class SftpClientImp implements SftpClient {
 		setSessionConfig();
 		connect();
 	}
+
+	@Override
+	public String toString() {
+		return "SftpClientImp [remoteHostDnsOrIp=" + remoteHostDnsOrIp + ", username=" + username + ", password="
+				+ password + "]";
+	}
+	
+
 
 }// end of class

@@ -2,6 +2,8 @@ package izaque.maciel.cunha.sftp.host;
 
 import java.io.IOException;
 
+import org.springframework.stereotype.Component;
+
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
@@ -12,7 +14,7 @@ import izaque.maciel.cunha.sftp.SftpClient;
 /*
  * @author Izaque Maciel Cunha
  */
-
+@Component
 public class FileToRemoteHostImp implements FileToRemoteHost {
 	private ChannelSftp channelSftp;
 
