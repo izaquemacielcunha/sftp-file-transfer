@@ -10,7 +10,7 @@
 		<relativePath />
 	</parent>
 	<groupId>izaque.maciel.cunha</groupId>
-	<artifactId>ssh-file-transfer</artifactId>
+	<artifactId>sftp-file-transfer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>ssh-file-transfer</name>

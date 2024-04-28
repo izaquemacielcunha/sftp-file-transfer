@@ -31,9 +31,6 @@ public class FileToRemoteHostImp implements FileToRemoteHost {
 		catch (JSchException e) {
 			e.printStackTrace();
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
 		finally {
 			try {
 				closeChannel();
@@ -59,7 +56,7 @@ public class FileToRemoteHostImp implements FileToRemoteHost {
 		channelSftp.connect();
 	}
 
-	private void transferFile(SftpClient sftpClient, FileHost fileHost) throws JSchException, SftpException, IOException {
+	private void transferFile(SftpClient sftpClient, FileHost fileHost) throws JSchException, SftpException {
 		openChannelSftp(sftpClient);
 		writeFile(fileHost);
 	}
@@ -69,9 +66,10 @@ public class FileToRemoteHostImp implements FileToRemoteHost {
 	}
 
 	private void closeChannel() throws IOException {
-		if (channelSftp != null)
+		if (channelSftp != null) {
 			channelSftp.getInputStream().close();
 			channelSftp.disconnect();
+		}
 	}
 	
 	private void closeSession(SftpClient sftpClient) {
